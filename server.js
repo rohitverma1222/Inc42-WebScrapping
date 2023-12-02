@@ -13,6 +13,7 @@ const port = process.env.PORT || 3000;
 // Add the stealth plugin
 puppeteerExtra.use(stealthPlugin());
 
+let data;
 // Your Puppeteer script
 const getQuotes = async () => {
   const browser = await puppeteerExtra.launch({
@@ -84,7 +85,8 @@ const getQuotes = async () => {
       return { headline, slickData, smallheadlineData, trendingData };
     });
     // Save data to a file
-    fs.writeFileSync('db.json', JSON.stringify(quotes, null, 2));
+    data=quotes;
+    // fs.writeFileSync('db.json', JSON.stringify(quotes, null, 2));
   } catch (error) {
     console.error('Error during scraping:', error);
   } finally {
@@ -100,16 +102,16 @@ cron.schedule('* * * * *', () => {
 // Set up a simple endpoint to trigger the scraping manually (optional)
 app.get('/', (req, res) => {
   getQuotes();
-  // res.send('Scraping initiated.');
+  res.send(data);
 
-  try {
-    const data = fs.readFileSync('db.json', 'utf8');
-    const jsonData = JSON.parse(data);
-    res.json(jsonData);
-  } catch (error) {
-    console.error('Error reading the file:', error);
-    res.status(500).send('Internal Server Error');
-  }
+  // try {
+  //   // const data = fs.readFileSync('db.json', 'utf8');
+  //   const jsonData = JSON.parse(data);
+  //   res.json(jsonData);
+  // } catch (error) {
+  //   console.error('Error reading the file:', error);
+  //   res.status(500).send('Internal Server Error');
+  // }
 });
 
 // Start the server
