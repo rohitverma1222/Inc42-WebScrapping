@@ -98,7 +98,7 @@ cron.schedule('* * * * *', () => {
 });
 
 // Set up a simple endpoint to trigger the scraping manually (optional)
-app.get('/scrape', (req, res) => {
+app.get('/', (req, res) => {
   getQuotes();
   // res.send('Scraping initiated.');
 
