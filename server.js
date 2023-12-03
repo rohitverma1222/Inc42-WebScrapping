@@ -120,41 +120,21 @@ app.get("/", (req, res) => {
     }
     try {
       const jsonData = JSON.parse(datas);
-      const responseData = {
-        headline: jsonData.headline,
-        slickData: jsonData.slickData,
-        smallheadlineData: jsonData.smallheadlineData,
-      };
+      // const responseData = {
+      //   headline: jsonData.headline,
+      //   slickData: jsonData.slickData,
+      //   smallheadlineData: jsonData.smallheadlineData,
+      // };
 
       // Send the array as a response
-      res.json(responseData);
+      res.json(jsonData);
     } catch (parseError) {
       console.error(parseError);
       res.status(500).send("Error parsing JSON");
     }
   });
 });
-app.get("/trend", (req, res) => {
-  fs.readFile("db.json", "utf8", (err, datas) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-    try {
-      const jsonData = JSON.parse(datas);
-      const responseData = {
-        trendingData:jsonData.trendingData
-      };
 
-      // Send the array as a response
-      res.json(responseData);
-    } catch (parseError) {
-      console.error(parseError);
-      res.status(500).send("Error parsing JSON");
-    }
-  });
-});
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
