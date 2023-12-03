@@ -6,18 +6,24 @@ import puppeteerExtra from 'puppeteer-extra';
 import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 import fs from 'fs';
 import cron from 'node-cron';
-
+require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Add the stealth plugin
 puppeteerExtra.use(stealthPlugin());
 
-let data;
+let data="hello";
 // Your Puppeteer script
 const getQuotes = async () => {
   const browser = await puppeteerExtra.launch({
-    headless: "new", // Set to false for debugging
+    args:[
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote"
+    ],
+    executablePath:process.env.NODE_ENV==="production"?process.env.PUPPETEER_EXECUTABLE_PATH:puppeteer.executablePath()
   });
 
   const page = await browser.newPage();
@@ -101,17 +107,7 @@ cron.schedule('* * * * *', () => {
 
 // Set up a simple endpoint to trigger the scraping manually (optional)
 app.get('/', (req, res) => {
-  getQuotes();
   res.send(data);
-
-  // try {
-  //   // const data = fs.readFileSync('db.json', 'utf8');
-  //   const jsonData = JSON.parse(data);
-  //   res.json(jsonData);
-  // } catch (error) {
-  //   console.error('Error reading the file:', error);
-  //   res.status(500).send('Internal Server Error');
-  // }
 });
 
 // Start the server
