@@ -1,12 +1,12 @@
 // server.js
 
-import express from 'express';
-import puppeteer from 'puppeteer';
-import puppeteerExtra from 'puppeteer-extra';
-import stealthPlugin from 'puppeteer-extra-plugin-stealth';
-import fs from 'fs';
-import cron from 'node-cron';
-import dotenv from 'dotenv';
+import express from "express";
+import puppeteer from "puppeteer";
+import puppeteerExtra from "puppeteer-extra";
+import stealthPlugin from "puppeteer-extra-plugin-stealth";
+import fs from "fs";
+import cron from "node-cron";
+import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
@@ -15,23 +15,26 @@ const port = process.env.PORT || 3000;
 // Add the stealth plugin
 puppeteerExtra.use(stealthPlugin());
 
-let data="hello";
+let data = "hello";
 // Your Puppeteer script
 const getQuotes = async () => {
   const browser = await puppeteerExtra.launch({
-    args:[
+    args: [
       "--disable-setuid-sandbox",
       "--no-sandbox",
       "--single-process",
-      "--no-zygote"
+      "--no-zygote",
     ],
-    executablePath:process.env.NODE_ENV==="production"?process.env.PUPPETEER_EXECUTABLE_PATH:puppeteer.executablePath()
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
   });
 
   const page = await browser.newPage();
 
   try {
-    await page.goto('https://inc42.com/', { waitUntil: 'domcontentloaded' });
+    await page.goto("https://inc42.com/", { waitUntil: "domcontentloaded" });
 
     // Rest of your scraping logic
     await page.waitForSelector(".wru-image-box", { visible: true });
@@ -93,44 +96,65 @@ const getQuotes = async () => {
       return { headline, slickData, smallheadlineData, trendingData };
     });
     // Save data to a file
-    data=quotes;
-    fs.writeFileSync('db.json', JSON.stringify(quotes, null, 2));
+    data = quotes;
+    fs.writeFileSync("db.json", JSON.stringify(quotes, null, 2));
   } catch (error) {
-    console.error('Error during scraping:', error);
+    console.error("Error during scraping:", error);
   } finally {
     await browser.close();
   }
 };
 
 // Schedule the scraping task using cron
-cron.schedule('* * * * *', () => {
+cron.schedule("* * * * *", () => {
   getQuotes();
 });
 
 // Set up a simple endpoint to trigger the scraping manually (optional)
-app.get('/', (req, res) => {
-  fs.readFile('db.json', 'utf8', (err, data) => {
+app.get("/", (req, res) => {
+  fs.readFile("db.json", "utf8", (err, datas) => {
     if (err) {
       console.error(err);
-      res.status(500).send('Internal Server Error');
+      res.status(500).send("Internal Server Error");
       return;
     }
-
     try {
-      // Parse the JSON data
-      const jsonData = JSON.parse(data);
-      
-      // Assuming you have a 'users' property in your JSON
+      const jsonData = JSON.parse(datas);
+      const responseData = {
+        headline: jsonData.headline,
+        slickData: jsonData.slickData,
+        smallheadlineData: jsonData.smallheadlineData,
+      };
 
-      // Send the users data as a response
-      res.json(jsonData);
+      // Send the array as a response
+      res.json(responseData);
     } catch (parseError) {
       console.error(parseError);
-      res.status(500).send('Error parsing JSON');
+      res.status(500).send("Error parsing JSON");
     }
-  })
+  });
 });
+app.get("/trend", (req, res) => {
+  fs.readFile("db.json", "utf8", (err, datas) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    try {
+      const jsonData = JSON.parse(datas);
+      const responseData = {
+        trendingData:jsonData.trendingData
+      };
 
+      // Send the array as a response
+      res.json(responseData);
+    } catch (parseError) {
+      console.error(parseError);
+      res.status(500).send("Error parsing JSON");
+    }
+  });
+});
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
