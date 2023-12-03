@@ -6,7 +6,9 @@ import puppeteerExtra from 'puppeteer-extra';
 import stealthPlugin from 'puppeteer-extra-plugin-stealth';
 import fs from 'fs';
 import cron from 'node-cron';
-require("dotenv").config();
+import dotenv from 'dotenv';
+dotenv.config();
+
 const app = express();
 const port = process.env.PORT || 3000;
 
