@@ -121,10 +121,9 @@ app.get('/', (req, res) => {
       const jsonData = JSON.parse(data);
       
       // Assuming you have a 'users' property in your JSON
-      const users = jsonData.users;
 
       // Send the users data as a response
-      res.json(users);
+      res.json(jsonData);
     } catch (parseError) {
       console.error(parseError);
       res.status(500).send('Error parsing JSON');
