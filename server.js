@@ -94,7 +94,7 @@ const getQuotes = async () => {
     });
     // Save data to a file
     data=quotes;
-    // fs.writeFileSync('db.json', JSON.stringify(quotes, null, 2));
+    fs.writeFileSync('db.json', JSON.stringify(quotes, null, 2));
   } catch (error) {
     console.error('Error during scraping:', error);
   } finally {
@@ -109,7 +109,27 @@ cron.schedule('* * * * *', () => {
 
 // Set up a simple endpoint to trigger the scraping manually (optional)
 app.get('/', (req, res) => {
-  res.send(data);
+  fs.readFile('db.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+      return;
+    }
+
+    try {
+      // Parse the JSON data
+      const jsonData = JSON.parse(data);
+      
+      // Assuming you have a 'users' property in your JSON
+      const users = jsonData.users;
+
+      // Send the users data as a response
+      res.json(users);
+    } catch (parseError) {
+      console.error(parseError);
+      res.status(500).send('Error parsing JSON');
+    }
+  })
 });
 
 // Start the server
