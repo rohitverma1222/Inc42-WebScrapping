@@ -5,6 +5,7 @@ import stealthPlugin from "puppeteer-extra-plugin-stealth";
 import fs from "fs";
 import cron from "node-cron";
 import dotenv from "dotenv";
+import { log } from "console";
 dotenv.config();
 
 const app = express();
@@ -338,7 +339,7 @@ const getQuotes = async () => {
     await page.goto("https://inc42.com/", { waitUntil: "domcontentloaded" });
 
     // Rest of your scraping logic
-    await page.waitForSelector(".wru-image-box", { visible: true });
+    await page.waitForSelector(".main-menu-align-right", { visible: true });
     const quotes = await page.evaluate(() => {
       const firstData = document.querySelector(".row");
       const bigcardData = firstData.querySelectorAll(".card-image");
@@ -398,6 +399,7 @@ const getQuotes = async () => {
     });
     // Save data to a file
     data = quotes;
+    console.log(quotes);
     // fs.writeFileSync("db.json", JSON.stringify(quotes, null, 2));
   } catch (error) {
     console.error("Error during scraping:", error);
