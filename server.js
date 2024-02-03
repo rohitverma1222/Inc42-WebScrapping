@@ -358,13 +358,15 @@ const getNews = async () => {
       const smallheadlineData = [];
       smallHeadline.forEach((news) => {
         const quoteElements = news.querySelectorAll(".card-image");
-        const resultArray = [];
+        // const resultArray = [];
+        let text="";
+        let href=""
         quoteElements.forEach((newsdata) => {
-          const text = newsdata.querySelector("a").getAttribute("title");
-          const href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
-          resultArray.push({ text, href });
+          text = newsdata.querySelector("a").getAttribute("title");
+          href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
+          // resultArray.push({ text, href });
         });
-        smallheadlineData.push(resultArray);
+        smallheadlineData.push({text,href});
       });
 
       
@@ -381,13 +383,14 @@ const getInDepth = async () => {
       const smallheadlineData = [];
       smallHeadline.forEach((news) => {
         const quoteElements = news.querySelectorAll(".card-image");
-        const resultArray = [];
+        let text="";
+        let href=""
         quoteElements.forEach((newsdata) => {
-          const text = newsdata.querySelector("a").getAttribute("title");
-          const href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
-          resultArray.push({ text, href });
+          text = newsdata.querySelector("a").getAttribute("title");
+          href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
+          // resultArray.push({ text, href });
         });
-        smallheadlineData.push(resultArray);
+        smallheadlineData.push({text,href});
       });
 
       
@@ -403,14 +406,14 @@ const getStartup = async () => {
       const smallHeadline = document.querySelectorAll(".horizontal-card");
       const smallheadlineData = [];
       smallHeadline.forEach((news) => {
-        const quoteElements = news.querySelectorAll(".card-image");
-        const resultArray = [];
+        let text="";
+        let href=""
         quoteElements.forEach((newsdata) => {
-          const text = newsdata.querySelector("a").getAttribute("title");
-          const href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
-          resultArray.push({ text, href });
+          text = newsdata.querySelector("a").getAttribute("title");
+          href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
+          // resultArray.push({ text, href });
         });
-        smallheadlineData.push(resultArray);
+        smallheadlineData.push({text,href});
       });
 
       
@@ -427,13 +430,14 @@ const getResources = async () => {
       const smallheadlineData = [];
       smallHeadline.forEach((news) => {
         const quoteElements = news.querySelectorAll(".card-image");
-        const resultArray = [];
+        let text="";
+        let href=""
         quoteElements.forEach((newsdata) => {
-          const text = newsdata.querySelector("a").getAttribute("title");
-          const href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
-          resultArray.push({ text, href });
+          text = newsdata.querySelector("a").getAttribute("title");
+          href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
+          // resultArray.push({ text, href });
         });
-        smallheadlineData.push(resultArray);
+        smallheadlineData.push({text,href});
       });
 
       
