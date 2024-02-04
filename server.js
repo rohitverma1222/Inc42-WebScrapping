@@ -363,8 +363,9 @@ const getNews = async () => {
         let href=""
         quoteElements.forEach((newsdata) => {
           text = newsdata.querySelector("a").getAttribute("title");
-          href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
-          // resultArray.push({ text, href });
+          href = newsdata.querySelector("img").getAttribute("data-src");
+          if(href===null)
+            href=newsdata.querySelector("img").getAttribute("src");
         });
         smallheadlineData.push({text,href});
       });
@@ -387,8 +388,9 @@ const getInDepth = async () => {
         let href=""
         quoteElements.forEach((newsdata) => {
           text = newsdata.querySelector("a").getAttribute("title");
-          href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
-          // resultArray.push({ text, href });
+          href = newsdata.querySelector("img").getAttribute("data-src");
+          if(href===null)
+            href=newsdata.querySelector("img").getAttribute("src");
         });
         smallheadlineData.push({text,href});
       });
@@ -406,12 +408,14 @@ const getStartup = async () => {
       const smallHeadline = document.querySelectorAll(".horizontal-card");
       const smallheadlineData = [];
       smallHeadline.forEach((news) => {
+        const quoteElements = news.querySelectorAll(".card-image");
         let text="";
         let href=""
         quoteElements.forEach((newsdata) => {
           text = newsdata.querySelector("a").getAttribute("title");
-          href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
-          // resultArray.push({ text, href });
+          href = newsdata.querySelector("img").getAttribute("data-src");
+          if(href===null)
+            href=newsdata.querySelector("img").getAttribute("src");
         });
         smallheadlineData.push({text,href});
       });
@@ -433,9 +437,11 @@ const getResources = async () => {
         let text="";
         let href=""
         quoteElements.forEach((newsdata) => {
+          console.log(newsdata);
           text = newsdata.querySelector("a").getAttribute("title");
-          href = newsdata.querySelector("a").getAttribute("href"); // Corrected line
-          // resultArray.push({ text, href });
+          href = newsdata.querySelector("img").getAttribute("data-src");
+          if(href===null)
+            href=newsdata.querySelector("img").getAttribute("src");
         });
         smallheadlineData.push({text,href});
       });
